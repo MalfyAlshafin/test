@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jasa Pembuatan & Desain Website Profesional - BlueByte Studio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for animations and theme */
+        :root {
+            --primary-blue: #87CEEB; /* Sky Blue - Brighter */
+            --dark-blue: #1E90FF;   /* Dodger Blue - Stronger Accent */
+            --light-bg: #F0F8FF;    /* Alice Blue - Softer background */
+            --white: #FFFFFF;
+            --text-color: #000000; /* Changed text color to black */
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --cursor-color: rgba(30, 144, 255, 0.2); /* For cursor follower */
+        }
+
+        html {
+            scroll-behavior: smooth; /* Global smooth scrolling */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            overflow-x: hidden; /* Prevent horizontal scroll due to animations */
+            cursor: none; /* Hide default cursor for the entire body */
+        }
+
+        /* Custom Cursor Follower */
+        #cursor-follower {
+            position: fixed;
+            width: 25px;
+            height: 25px;
+            background-color: var(--cursor-color);
+            border-radius: 50%;
+            pointer-events: none; /* Allows clicks to pass through to elements below */
+            z-index: 9999;
+            transform: translate(-50%, -50%); /* Center the follower on the cursor */
+            transition: transform 0.1s linear, background-color 0.2s ease; /* Smooth movement and color change */
+            mix-blend-mode: multiply; /* Blends nicely with background */
+        }
+
+        /* Hover effect for interactive elements */
+        #cursor-follower.active-hover {
+            background-color: var(--dark-blue);
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+
+        /* Ensure default cursor is hidden on interactive elements as well */
+        a, button, .service-card, .why-choose-card, .form-input, .form-textarea {
+            cursor: none !important; /* Added !important for maximum precedence */
+        }
+        /* Also target individual social links in footer */
+        footer a {
+            cursor: none !important;
+        }
+
+        .header-bg {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px var(--shadow-color);
+            transition: all 0.3s ease; /* Add transition for smooth changes */
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Subtle border */
+        }
+
+        .header-scrolled {
+            background-color: rgba(255, 255, 255, 0.98); /* Slightly less transparent */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15); /* Stronger shadow on scroll */
+            padding-top: 0.65rem; /* Shrink effect */
+            padding-bottom: 0.65rem; /* Shrink effect */
+        }
+
+        /* Header Logo Animation */
+        .header-logo-text {
+            display: inline-block; /* Needed for transform */
+            animation: pulseLogo 2s infinite ease-in-out; /* Continuous pulse animation */
+        }
+        @keyframes pulseLogo {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); } /* Slightly larger pulse */
+            100% { transform: scale(1); }
+        }
+        .header-logo-text:hover {
+            animation: none; /* Pause pulse on hover */
+            transform: scale(1.05); /* Apply static hover scale */
+        }
+
+
+        /* Navigation link underline animation */
+        .nav-link {
+            position: relative;
+            text-decoration: none;
+            display: inline-block; /* Essential for ::after pseudo-element sizing */
+            padding-bottom: 5px; /* Space for underline */
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0px; /* Position at the bottom of the padding */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--dark-blue);
+            transition: width 0.3s ease-out;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-blue), var(--dark-blue)); /* Gradient background */
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border-radius: 9999px; /* Full rounded */
+            font-weight: 700; /* Bolder font */
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); /* Smoother transition */
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4); /* Stronger initial shadow */
+            border: none; /* Remove default border */
+            position: relative; /* Needed for ripple effect */
+            overflow: hidden; /* Hide ripple outside button */
+            z-index: 1; /* Ensure button is above ripple */
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, var(--dark-blue), var(--primary-blue)); /* Reverse gradient on hover */
+            box-shadow: 0 8px 25px rgba(74, 144, 226, 0.6); /* Even stronger shadow */
+            transform: translateY(-4px) scale(1.02); /* More pronounced lift and slight scale */
+        }
+
+        /* Ripple effect for buttons */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.7); /* White ripple */
+            animation: ripple-animation 0.6s linear forwards; /* Faster animation */
+            transform: scale(0);
+            pointer-events: none; /* Don't block clicks */
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+
+        .section-title {
+            color: var(--dark-blue);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle text shadow */
+        }
+
+        /* Hero section animations */
+        .hero-text-animate {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInSlideUp 1s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .hero-text-animate:nth-child(1) { animation-delay: 0.2s; }
+        .hero-text-animate:nth-child(2) { animation-delay: 0.4s; }
+        .hero-text-animate:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes fadeInSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typing Effect for Hero Subtitle */
+        .typing-text {
+            overflow: hidden;
+            white-space: nowrap;
+            margin: 0 auto;
+            border-right: .15em solid var(--dark-blue);
+            letter-spacing: .08em; /* Slightly tighter letter spacing */
+            animation:
+                typing 3s steps(60, end) forwards,
+                blink-caret .75s step-end infinite;
+            width: 0;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--dark-blue); }
+        }
+
+        /* Card hover effect */
+        .service-card, .why-choose-card {
+            background-color: var(--white);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); /* Softer, larger shadow */
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); /* Smoother cubic-bezier transition */
+            transform: translateY(0);
+            border: 1px solid rgba(0, 0, 0, 0.03); /* Very subtle border */
+        }
+
+        .service-card:hover, .why-choose-card:hover {
+            transform: translateY(-10px) scale(1.01); /* More lift and slight scale */
+            box-shadow: 0 15px 45px rgba(74, 144, 226, 0.3); /* Prominent shadow on hover */
+        }
+
+        /* Scroll reveal animation for sections */
+        .reveal-section {
+            opacity: 0;
+            transform: translateY(30px); /* Simpler slide up for the whole section */
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .reveal-section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered item animation within sections */
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95); /* Slight scale for card entry */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .stagger-item.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        /* Stagger delays handled by JS */
+
+
+        /* Background animation (subtle bubbles) */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--light-bg) 0%, var(--primary-blue) 100%);
+            background-size: 400% 400%; /* Larger background for movement */
+            opacity: 0.2; /* Slightly more visible gradient */
+            z-index: -1;
+            animation: backgroundGradient 30s ease infinite alternate; /* Slower, smoother gradient animation */
+        }
+
+        @keyframes backgroundGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .bubble {
+            position: absolute;
+            background-color: rgba(135, 206, 235, 0.4); /* Bubbles match primary blue */
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatBubble 20s infinite ease-in-out; /* Slower bubble float */
+            /* Removed transition: transform for parallax here, applied to parent */
+        }
+
+        /* Specific bubble positions and animation delays */
+        .bubble:nth-child(1) { width: 50px; height: 50px; top: 15%; left: 8%; animation-delay: 0s; }
+        .bubble:nth-child(2) { width: 70px; height: 70px; top: 35%; left: 25%; animation-delay: 3s; background-color: rgba(30, 144, 255, 0.3); }
+        .bubble:nth-child(3) { width: 40px; height: 40px; top: 65%; left: 12%; animation-delay: 6s; }
+        .bubble:nth-child(4) { width: 80px; height: 80px; top: 25%; left: 75%; animation-delay: 1s; background-color: rgba(135, 206, 235, 0.3); }
+        .bubble:nth-child(5) { width: 60px; height: 60px; top: 75%; left: 85%; animation-delay: 4s; }
+        .bubble:nth-child(6) { width: 35px; height: 35px; top: 50%; left: 65%; animation-delay: 7s; background-color: rgba(30, 144, 255, 0.25); }
+
+
+        @keyframes floatBubble {
+            0% { transform: translateY(0) translateX(0) scale(0.7); opacity: 0; }
+            30% { opacity: 1; }
+            70% { transform: translateY(-200px) translateX(100px) scale(1.1); }
+            100% { transform: translateY(-400px) translateX(200px) scale(1.3); opacity: 0; }
+        }
+
+        /* SVG Animations for "Why Choose Us" section */
+        @keyframes drawPen {
+            0% { stroke-dasharray: 1000; stroke-dashoffset: 1000; opacity: 0; }
+            10% { opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 1; }
+        }
+        .animate-draw-pen path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            opacity: 0; /* Hidden until activated by JS */
+        }
+
+        @keyframes rotateGear {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-rotate-gear {
+            /* Keep this continuous animation */
+        }
+
+        @keyframes pulseHeart {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .animate-pulse-heart {
+            animation: pulseHeart 1.5s infinite ease-in-out;
+        }
+
+        /* Form styling */
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #D3D3D3; /* Light gray border */
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: var(--text-color);
+            background-color: var(--white); /* White background for inputs */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--dark-blue);
+            box-shadow: 0 0 0 4px rgba(30, 144, 255, 0.2); /* More prominent focus shadow */
+        }
+
+        /* Scroll Down Indicator */
+        .scroll-down-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounceArrow 1.8s infinite, pulseIndicator 2s infinite alternate; /* Combined animations */
+            color: var(--dark-blue);
+            z-index: 10;
+        }
+
+        @keyframes bounceArrow {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-12px) translateX(-50%); /* More bounce */
+            }
+            60% {
+                transform: translateY(-6px) translateX(-50%);
+            }
+        }
+        @keyframes pulseIndicator {
+            0% { transform: translateY(0) translateX(-50%) scale(1); opacity: 1; }
+            50% { transform: translateY(0) translateX(-50%) scale(1.1); opacity: 0.8; }
+            100% { transform: translateY(0) translateX(-50%) scale(1); opacity: 1; }
+        }
+
+        /* Social media icon hover effect in footer */
+        .social-link-item {
+            transition: transform 0.3s ease, color 0.3s ease;
+            display: inline-block; /* Needed for transform to work properly */
+        }
+        .social-link-item:hover {
+            transform: translateY(-3px) scale(1.1);
+            color: var(--primary-blue); /* Lighter blue on hover */
+        }
+
+        /* Footer background gradient animation */
+        .footer-gradient-overlay {
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.1) 0%, rgba(30, 144, 255, 0.1) 100%);
+            background-size: 200% 200%;
+            animation: footerGradient 25s ease infinite alternate;
+        }
+
+        @keyframes footerGradient {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Custom Cursor Follower -->
+    <div id="cursor-follower"></div>
+
+    <!-- Header Section -->
+    <header id="main-header" class="header-bg py-4 sticky top-0 z-50">
+        <nav class="container mx-auto flex justify-between items-center px-4 sm:px-6 md:px-8 lg:px-16">
+            <a href="#" class="text-xl sm:text-2xl font-extrabold text-gray-800 header-logo-text">
+                <span class="text-primary-blue">Blue</span><span class="text-dark-blue">Byte Studio</span>
+            </a>
+            <ul class="hidden md:flex space-x-6 lg:space-x-8">
+                <li><a href="#hero" class="nav-link text-sm sm:text-base text-gray-700 hover:text-dark-blue font-semibold transition-colors duration-300">Beranda</a></li>
+                <li><a href="#services" class="nav-link text-sm sm:text-base text-gray-700 hover:text-dark-blue font-semibold transition-colors duration-300">Layanan</a></li>
+                <li><a href="#why-choose-us" class="nav-link text-sm sm:text-base text-gray-700 hover:text-dark-blue font-semibold transition-colors duration-300">Mengapa Kami</a></li>
+                <li><a href="#contact" class="nav-link text-sm sm:text-base text-gray-700 hover:text-dark-blue font-semibold transition-colors duration-300">Kontak</a></li>
+            </ul>
+            <div class="md:hidden">
+                <button id="menu-button" class="text-gray-600 focus:outline-none p-2 rounded-md hover:bg-gray-100 transition-colors duration-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-4 py-4 border-t border-gray-200">
+            <ul class="flex flex-col space-y-3">
+                <li><a href="#hero" class="text-gray-700 hover:text-dark-blue font-medium transition-colors duration-300 block py-2 px-3 rounded-md hover:bg-blue-50">Beranda</a></li>
+                <li><a href="#services" class="text-gray-700 hover:text-dark-blue font-medium transition-colors duration-300 block py-2 px-3 rounded-md hover:bg-blue-50">Layanan</a></li>
+                <li><a href="#why-choose-us" class="text-gray-700 hover:text-dark-blue font-medium transition-colors duration-300 block py-2 px-3 rounded-md hover:bg-blue-50">Mengapa Kami</a></li>
+                <li><a href="#contact" class="text-gray-700 hover:text-dark-blue font-medium transition-colors duration-300 block py-2 px-3 rounded-md hover:bg-blue-50">Kontak</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section relative h-screen flex items-center justify-center text-center overflow-hidden px-4 md:px-0" data-parallax-container>
+        <div id="parallax-layer" class="absolute inset-0 z-0 transition-transform duration-100 ease-linear">
+            <!-- Bubbles for background effect with data-depth for parallax -->
+            <div class="bubble w-12 h-12 top-[15%] left-[8%] animation-delay-[0s]" data-depth="0.2"></div>
+            <div class="bubble w-18 h-18 top-[35%] left-[25%] animation-delay-[3s] bg-opacity-30" data-depth="0.4"></div>
+            <div class="bubble w-10 h-10 top-[65%] left-[12%] animation-delay-[6s]" data-depth="0.1"></div>
+            <div class="bubble w-20 h-20 top-[25%] left-[75%] animation-delay-[1s] bg-opacity-30" data-depth="0.5"></div>
+            <div class="bubble w-16 h-16 top-[75%] left-[85%] animation-delay-[4s]" data-depth="0.3"></div>
+            <div class="bubble w-9 h-9 top-[50%] left-[65%] animation-delay-[7s] bg-opacity-25" data-depth="0.25"></div>
+        </div>
+        
+        <div class="z-10 max-w-sm sm:max-w-xl md:max-w-4xl mx-auto">
+            <h1 class="text-4xl leading-tight sm:text-5xl md:text-6xl font-extrabold text-gray-900 mb-4 hero-text-animate">
+                Jasa <span class="text-primary-blue">Pembuatan</span> & <span class="text-dark-blue">Desain</span> Website Profesional
+            </h1>
+            <p class="text-base sm:text-lg md:text-xl text-gray-700 mb-8 hero-text-animate typing-text">
+                Kami membantu bisnis Anda bersinar di dunia digital dengan website yang memukau dan fungsional.
+            </p>
+            <a href="https://wa.me/6281283515225" class="btn-primary inline-block hero-text-animate" target="_blank">Mulai Proyek Anda</a>
+        </div>
+        <!-- Scroll Down Indicator -->
+        <div class="scroll-down-indicator text-dark-blue text-4xl">
+            <svg class="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16 sm:py-20 bg-white reveal-section">
+        <div class="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-center mb-10 sm:mb-12 section-title">Layanan Kami</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-10 max-w-3xl mx-auto">
+                <!-- Service Card 1: Web Development -->
+                <div class="service-card p-6 sm:p-8 text-center stagger-item">
+                    <div class="text-4xl sm:text-5xl text-dark-blue mb-4 sm:mb-6">💻</div>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Pengembangan Website</h3>
+                    <p class="text-gray-700 text-sm sm:text-base">
+                        Membangun website responsif, cepat, dan aman dari nol, sesuai kebutuhan unik bisnis Anda. Dari situs sederhana hingga aplikasi web kompleks.
+                    </p>
+                </div>
+                <!-- Service Card 2: Web Design -->
+                <div class="service-card p-6 sm:p-8 text-center stagger-item">
+                    <div class="text-4xl sm:text-5xl text-dark-blue mb-4 sm:mb-6">🎨</div>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Desain Website Kreatif</h3>
+                    <p class="text-gray-700 text-sm sm:text-base">
+                        Menciptakan antarmuka pengguna (UI) yang menarik dan pengalaman pengguna (UX) yang intuitif untuk memastikan website Anda berkesan.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Section for "Why Choose Us" -->
+    <section id="why-choose-us" class="py-16 sm:py-20 bg-light-bg reveal-section">
+        <div class="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-center mb-10 sm:mb-12 section-title">Kenapa Memilih BlueByte Studio?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
+                <div class="why-choose-card p-6 sm:p-8 text-center stagger-item">
+                    <div class="text-dark-blue mb-4 sm:mb-6">
+                        <!-- Animated SVG Icon 1: Custom Design (Pena) -->
+                        <svg class="w-16 h-16 mx-auto animate-draw-pen" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 18.07a4.5 4.5 0 01-1.897 1.13L6 20l1.128-3.753a4.5 4.5 0 011.13-1.897l8.932-8.932zm0 0L19.5 7.75" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Desain Kustom & Unik</h3>
+                    <p class="text-gray-700 text-sm sm:text-base">
+                        Setiap website dirancang khusus untuk mencerminkan identitas merek Anda, memastikan tampilan yang berbeda dan berkesan.
+                    </p>
+                </div>
+                <div class="why-choose-card p-6 sm:p-8 text-center stagger-item">
+                    <div class="text-dark-blue mb-4 sm:mb-6">
+                        <!-- Animated SVG Icon 2: Performance (Gear) -->
+                        <svg class="w-16 h-16 mx-auto animate-rotate-gear" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Performa Optimal</h3>
+                    <p class="text-gray-700 text-sm sm:text-base">
+                        Website Anda akan dioptimalkan untuk kecepatan dan SEO, memastikan pengalaman pengguna yang luar biasa dan visibilitas tinggi di mesin pencari.
+                    </p>
+                </div>
+                <div class="why-choose-card p-6 sm:p-8 text-center stagger-item">
+                    <div class="text-dark-blue mb-4 sm:mb-6">
+                        <!-- Animated SVG Icon 3: Support (Heart) -->
+                        <svg class="w-16 h-16 mx-auto animate-pulse-heart" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Dukungan Responsif</h3>
+                    <p class="text-gray-700 text-sm sm:text-base">
+                        Kami selalu siap membantu. Dapatkan dukungan teknis dan konsultasi ahli untuk memastikan website Anda berjalan lancar setiap saat.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 sm:py-20 bg-light-bg reveal-section">
+        <div class="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-center mb-10 sm:mb-12 section-title">Hubungi Kami</h2>
+            <div class="max-w-xl mx-auto bg-white p-6 sm:p-8 rounded-2xl shadow-lg stagger-item">
+                <form id="contact-form">
+                    <input type="text" id="name" placeholder="Nama Lengkap Anda" required class="form-input text-sm sm:text-base">
+                    <input type="email" id="email" placeholder="Email Anda" required class="form-input text-sm sm:text-base">
+                    <textarea id="message" rows="5" placeholder="Pesan Anda" required class="form-textarea text-sm sm:text-base"></textarea>
+                    <button type="submit" class="btn-primary w-full text-base sm:text-lg">Kirim Pesan</button>
+                </form>
+                <div id="form-message" class="mt-4 text-center text-xs sm:text-sm font-semibold hidden"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-white text-dark-blue py-12 sm:py-16 relative overflow-hidden">
+        <!-- Subtle gradient animation for footer background - ADJUSTED FOR LIGHTER BG -->
+        <div class="absolute inset-0 footer-gradient-overlay z-0" style="background: linear-gradient(135deg, rgba(135, 206, 235, 0.1) 0%, rgba(30, 144, 255, 0.1) 100%);"></div>
+
+        <div class="container mx-auto px-4 sm:px-6 md:px-8 lg:px-16 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 text-left">
+                <!-- Company Info -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-dark-blue">BlueByte Studio</h3>
+                    <p class="text-sm text-gray-700 mb-2">Jasa Pembuatan & Desain Website Profesional.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-dark-blue">Tautan Cepat</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#hero" class="text-sm text-gray-700 hover:text-primary-blue transition-colors duration-300 nav-link-footer">Beranda</a></li>
+                        <li><a href="#services" class="text-sm text-gray-700 hover:text-primary-blue transition-colors duration-300 nav-link-footer">Layanan</a></li>
+                        <li><a href="#why-choose-us" class="text-sm text-gray-700 hover:text-primary-blue transition-colors duration-300 nav-link-footer">Mengapa Kami</a></li>
+                        <li><a href="#contact" class="text-sm text-gray-700 hover:text-primary-blue transition-colors duration-300 nav-link-footer">Kontak</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-dark-blue">Hubungi Kami</h3>
+                    <ul class="space-y-2">
+                        <li><a href="mailto:info@bluebytestudio.com" class="text-sm text-gray-700 hover:text-primary-blue transition-colors duration-300">Email: bluebyte.development@gmail.com</a></li>
+                        <li><a href="tel:+6281283515225" class="text-sm text-gray-700 hover:text-primary-blue transition-colors duration-300">Telepon: +62 812 8351 5225</a></li>
+                        <li><a href="https://wa.me/6281283515225" target="_blank" class="text-sm text-gray-700 hover:text-primary-blue transition-colors duration-300">WhatsApp: +62 812 8351 5225</a></li>
+                    </ul>
+                </div>
+
+                <!-- Social Media (Only Instagram) -->
+                <div class="lg:col-span-1 md:col-span-3">
+                    <h3 class="text-lg font-bold mb-4 text-dark-blue">Ikuti Kami</h3>
+                    <div class="flex space-x-5 mb-6">
+                        <a href="https://www.instagram.com/bluebyte.studio/" target="_blank" class="social-icon-wrapper text-gray-700 hover:text-primary-blue transition-all duration-300">
+                            <!-- Instagram SVG Icon - Corrected and Cleaned -->
+                            <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 mt-8 pt-6 text-center">
+                <p class="text-sm text-gray-700">&copy; 2025 BlueByte Studio. Hak Cipta Dilindungi Undang-Undang.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainHeader = document.getElementById('main-header');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuButton = document.getElementById('menu-button');
+            const contactForm = document.getElementById('contact-form');
+            const formMessage = document.getElementById('form-message');
+            const heroSubtitle = document.querySelector('.hero-text-animate.typing-text');
+            const parallaxLayer = document.getElementById('parallax-layer'); // The div containing bubbles for parallax
+            const cursorFollower = document.getElementById('cursor-follower');
+            const primaryButtons = document.querySelectorAll('.btn-primary');
+
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Mobile menu toggle
+            if (menuButton && mobileMenu) {
+                menuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            // Header shrink/shadow on scroll
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    mainHeader.classList.add('header-scrolled');
+                } else {
+                    mainHeader.classList.remove('header-scrolled');
+                }
+            });
+
+            // Scroll Reveal Animation (for sections) and Staggered Items
+            const revealSections = document.querySelectorAll('.reveal-section');
+
+            const sectionOptions = {
+                threshold: 0.1 // When 10% of the section is visible
+            };
+
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Animate stagger-items within this section
+                        const staggerItems = entry.target.querySelectorAll('.stagger-item');
+                        staggerItems.forEach((item, index) => {
+                            item.style.transitionDelay = `${index * 0.15}s`; // Stagger delay
+                            item.classList.add('active');
+                            // Trigger SVG animation if present
+                            const svgPath = item.querySelector('.animate-draw-pen path');
+                            if (svgPath) {
+                                svgPath.style.animation = 'none'; // Reset animation
+                                void svgPath.offsetWidth; // Trigger reflow
+                                svgPath.style.animation = `drawPen 2s ease-in-out forwards ${index * 0.15 + 0.5}s`; // Re-apply with delay
+                            }
+                        });
+                    } else {
+                        // Reset animation when out of view
+                        entry.target.classList.remove('active');
+                        const staggerItems = entry.target.querySelectorAll('.stagger-item');
+                        staggerItems.forEach((item) => {
+                            item.classList.remove('active');
+                            item.style.transitionDelay = '0s'; // Reset delay
+                            // Reset SVG animation if present
+                            const svgPath = item.querySelector('.animate-draw-pen path');
+                            if (svgPath) {
+                                svgPath.style.animation = 'none';
+                            }
+                        });
+                    }
+                });
+            }, sectionOptions);
+
+            revealSections.forEach(el => {
+                sectionObserver.observe(el);
+            });
+
+            // Contact Form Submission (client-side only)
+            if (contactForm && formMessage) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault(); // Prevent actual form submission
+
+                    // Simulate form submission success
+                    formMessage.classList.remove('hidden', 'text-red-500');
+                    formMessage.classList.add('text-green-500');
+                    formMessage.textContent = 'Pesan Anda telah berhasil terkirim! Terima kasih.';
+                    contactForm.reset(); // Clear the form
+                    // You might want to hide the message after a few seconds
+                    setTimeout(() => {
+                        formMessage.classList.add('hidden');
+                    }, 5000);
+                });
+            }
+
+            // Reset typing animation on load for initial effect
+            if (heroSubtitle) {
+                heroSubtitle.style.animation = 'none';
+                void heroSubtitle.offsetWidth; // Trigger reflow
+                heroSubtitle.style.animation = null; // Re-enable animation
+            }
+
+            // Parallax Effect for Bubbles via #parallax-layer
+            if (parallaxLayer) {
+                const sensitivity = 0.02; // Adjust for more/less movement
+
+                window.addEventListener('mousemove', (e) => {
+                    const heroRect = document.getElementById('hero').getBoundingClientRect();
+                    const centerX = heroRect.left + heroRect.width / 2;
+                    const centerY = heroRect.top + heroRect.height / 2;
+
+                    const mouseX = e.clientX - centerX;
+                    const mouseY = e.clientY - centerY;
+
+                    const moveX = mouseX * sensitivity;
+                    const moveY = mouseY * sensitivity;
+
+                    parallaxLayer.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                });
+            }
+
+            // Cursor Follower Logic
+            if (cursorFollower) {
+                window.addEventListener('mousemove', (e) => {
+                    cursorFollower.style.left = `${e.clientX}px`;
+                    cursorFollower.style.top = `${e.clientY}px`;
+                });
+
+                // Add hover effects for cursor follower on interactive elements
+                const interactiveElements = document.querySelectorAll('a, button, .service-card, .why-choose-card, .form-input, .form-textarea');
+
+                interactiveElements.forEach(element => {
+                    element.addEventListener('mouseenter', () => {
+                        cursorFollower.classList.add('active-hover');
+                    });
+                    element.addEventListener('mouseleave', () => {
+                        cursorFollower.classList.remove('active-hover');
+                    });
+                });
+            }
+
+            // Ripple Effect for Primary Buttons
+            primaryButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - (size / 2);
+                    const y = e.clientY - rect.top - (size / 2);
+
+                    ripple.style.width = ripple.style.height = `${size}px`;
+                    ripple.style.left = `${x}px`;
+                    ripple.style.top = `${y}px`;
+                    ripple.classList.add('ripple');
+
+                    this.appendChild(ripple);
+
+                    ripple.addEventListener('animationend', () => {
+                        ripple.remove();
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
